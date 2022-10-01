@@ -17,14 +17,14 @@ class _GamePageState extends State<GamePage> {
 
   late Timer _timer;
 
-  final int width = 30;
-  final int height = 30;
+  final int _width = 30;
+  final int _height = 30;
 
-  late GameWorld game = GameWorld(width, height);
+  late final GameWorld _game = GameWorld(_width, _height);
 
-  final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
+  final ButtonStyle _raisedButtonStyle = ElevatedButton.styleFrom(
     foregroundColor: Colors.blue, backgroundColor: Colors.white,
-    minimumSize: const Size(88, 36),
+    minimumSize: const Size(64, 36),
     padding: const EdgeInsets.symmetric(horizontal: 16),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -32,16 +32,16 @@ class _GamePageState extends State<GamePage> {
     ),
   );
 
-  void startTimer() {
+  void _startTimer() {
     const duration = Duration(milliseconds: 200);
     _timer = Timer.periodic(duration, (Timer timer) {
       setState(() {
-        game.run();
+        _game.run();
       });
     });
   }
 
-  void stopTimer() {
+  void _stopTimer() {
     _timer.cancel();
   }
 
@@ -56,52 +56,58 @@ class _GamePageState extends State<GamePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  style: raisedButtonStyle,
+                  style: _raisedButtonStyle,
                   onPressed: () {
-                    startTimer();
+                    _startTimer();
                   },
                   child: const Text('Start'),
                 ),
-                const SizedBox(
-                  width: 20,
-                ),
+                const SizedBox(width: 16),
                 TextButton(
-                  style: raisedButtonStyle,
+                  style: _raisedButtonStyle,
                   onPressed: () {
-                    stopTimer();
+                    _stopTimer();
                   },
                   child: const Text('Stop'),
                 ),
-                const SizedBox(
-                  width: 20,
-                ),
+                const SizedBox(width: 16),
                 TextButton(
-                  style: raisedButtonStyle,
+                  style: _raisedButtonStyle,
                   onPressed: () {
                     setState(() {
-                      game.clearField();
+                      _game.run();
+                    });
+                  },
+                  child: const Text('Step'),
+                ),
+                const SizedBox(width: 16),
+                TextButton(
+                  style: _raisedButtonStyle,
+                  onPressed: () {
+                    setState(() {
+                      _game.clearField();
                     });
                   },
                   child: const Text('Clear'),
-                ),]
+                )]
             ),
             const SizedBox(
-              height: 10,
+              height: 10
             ),
             Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: game.getField().asMap().entries.map<Widget>((list) {
+            children: _game.getField().asMap().entries.map<Widget>((list) {
               int x = list.key;
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: list.value.asMap().entries.map<Widget>((state) {
                   int y = state.key;
-                  return GameTile(x, y, game);
+                  return GameTile(x, y, _game);
                 }).toList(),
               );
             }).toList(),
-          ),]
+          )]
         ),
       ),
     );

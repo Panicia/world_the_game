@@ -42,6 +42,7 @@ class GameWorld {
   }
 
   void _buildNextField() {
+    _nextField = _getEmptyField(_currentField.length, _currentField[0].length);
     for(int i = 0; i < _currentField.length; i++) {
       for(int j = 0; j < _currentField[0].length; j++) {
         int lifeCount = _countLifeAround(i, j);
@@ -57,7 +58,7 @@ class GameWorld {
         if(i == x && j == y) {
           continue;
         }
-        if(i < 0 || j < 0 || i > (_currentField.length - 1) || j > (_currentField[0].length - 1)) {
+        if(i < 0 || j < 0 || i >= _currentField.length || j >= _currentField[0].length) {
           continue;
         }
         if(_currentField[i][j] == 1) {

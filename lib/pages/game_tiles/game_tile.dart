@@ -19,17 +19,14 @@ class _GameTile extends State<GameTile> {
   late Color myColor;
 
   @override
-  void initState() {
+  Widget build(BuildContext context) {
+
     if(widget.game.isAlive(widget.x, widget.y) == 1) {
       myColor = Colors.blue;
     } else {
       myColor = Colors.white70;
     }
-    super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2),
