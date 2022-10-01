@@ -48,12 +48,24 @@ class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+      body: OrientationBuilder(
+          builder: (context, orientation) {
+            if (orientation == Orientation.portrait) {
+              return portraitMode();
+            } else {
+              return landscapeMode();
+            }
+          }),
+    );
+  }
+
+  Center portraitMode() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
                   style: _raisedButtonStyle,
@@ -89,27 +101,108 @@ class _GamePageState extends State<GamePage> {
                     });
                   },
                   child: const Text('Clear'),
-                )]
-            ),
-            const SizedBox(
+                )
+              ]
+          ),
+          const SizedBox(
               height: 10
-            ),
-            Column(
+          ),
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: _game.getField().asMap().entries.map<Widget>((list) {
+            children: _game
+                .getField()
+                .asMap()
+                .entries
+                .map<Widget>((list) {
               int x = list.key;
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: list.value.asMap().entries.map<Widget>((state) {
+                children: list.value
+                    .asMap()
+                    .entries
+                    .map<Widget>((state) {
                   int y = state.key;
                   return GameTile(x, y, _game);
                 }).toList(),
               );
             }).toList(),
-          )]
-        ),
-      ),
+          )
+        ]
+      )
     );
+  }
+
+  Center landscapeMode() {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: _game
+                .getField()
+                .asMap()
+                .entries
+                .map<Widget>((list) {
+              int x = list.key;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: list.value
+                    .asMap()
+                    .entries
+                    .map<Widget>((state) {
+                  int y = state.key;
+                  return GameTile(x, y, _game);
+                }).toList(),
+              );
+            }).toList(),
+          ),
+          const SizedBox(
+              width: 16
+          ),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  style: _raisedButtonStyle,
+                  onPressed: () {
+                    _startTimer();
+                  },
+                  child: const Text('Start'),
+                ),
+                const SizedBox(height: 24),
+                TextButton(
+                  style: _raisedButtonStyle,
+                  onPressed: () {
+                    _stopTimer();
+                  },
+                  child: const Text('Stop'),
+                ),
+                const SizedBox(height: 24),
+                TextButton(
+                  style: _raisedButtonStyle,
+                  onPressed: () {
+                    setState(() {
+                      _game.run();
+                    });
+                  },
+                  child: const Text('Step'),
+                ),
+                const SizedBox(height: 24),
+                TextButton(
+                  style: _raisedButtonStyle,
+                  onPressed: () {
+                    setState(() {
+                      _game.clearField();
+                    });
+                  },
+                  child: const Text('Clear'),
+                )
+              ]
+          )
+        ]
+    ));
   }
 }
