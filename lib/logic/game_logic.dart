@@ -1,23 +1,30 @@
+class Tile {
+  final int x;
+  final int y;
+  int alive;
+  Tile(this.x, this.y, this.alive);
+}
+
 class GameWorld {
 
-  late List<List<int>> _currentField;
-  late List<List<int>> _nextField;
+  late List<List<Tile>> _currentField;
+  late List<List<Tile>> _nextField;
 
   GameWorld(int width, int height) {
     _currentField = _getEmptyField(width, height);
     _nextField = _getEmptyField(width, height);
   }
 
-  void setStartCondition(List<List<int>> startField) {
+  void setStartCondition(List<List<Tile>> startField) {
     _currentField = startField;
   }
 
   void setAliveOne(int x, int y) {
-    _currentField[x][y] = 1;
+    _currentField[x][y].alive = 1;
   }
 
   void setDeadOne(int x, int y) {
-    _currentField[x][y] = 0;
+    _currentField[x][y].alive = 0;
   }
 
   void run() {
@@ -25,20 +32,30 @@ class GameWorld {
     _currentField = _nextField;
   }
 
-  List<List<int>> getField() {
+  List<List<Tile>> getField() {
     return _currentField;
   }
 
+  List<Tile> getTilesList() {
+    List<Tile> list = List.empty(growable: true);
+    for(int i = 0; i < _currentField.length; i++) {
+      for(int j = 0; j < _currentField.length; j++) {
+        list.add(_currentField[i][j]);
+      }
+    }
+    return list;
+  }
+
   int isAlive(int x, int y) {
-    return _currentField[x][y];
+    return _currentField[x][y].alive;
   }
 
   void clearField() {
     _currentField = _getEmptyField(_currentField.length, _currentField[0].length);
   }
 
-  List<List<int>> _getEmptyField(width, height) {
-    return List.generate(width, (_) => List.generate(height, (_) => 0, growable: false), growable: false);
+  List<List<Tile>> _getEmptyField(width, height) {
+    return List.generate(width, (x) => List.generate(height, (y) => Tile(x, y, 0), growable: false), growable: false);
   }
 
   void _buildNextField() {
@@ -46,7 +63,7 @@ class GameWorld {
     for(int i = 0; i < _currentField.length; i++) {
       for(int j = 0; j < _currentField[0].length; j++) {
         int lifeCount = _countLifeAround(i, j);
-        _nextField[i][j] = _makeLifeOrDead(i, j, lifeCount);
+        _nextField[i][j].alive = _makeLifeOrDead(i, j, lifeCount);
       }
     }
   }
@@ -61,7 +78,7 @@ class GameWorld {
         if(i < 0 || j < 0 || i >= _currentField.length || j >= _currentField[0].length) {
           continue;
         }
-        if(_currentField[i][j] == 1) {
+        if(_currentField[i][j].alive == 1) {
           lifeCount++;
         }
       }
@@ -70,7 +87,7 @@ class GameWorld {
   }
 
   int _makeLifeOrDead(int i, int j, int lifeCount) {
-    if (_currentField[i][j] == 1) {
+    if (_currentField[i][j].alive == 1) {
       if(lifeCount > 3 || lifeCount < 2) {
         return 0;
       }

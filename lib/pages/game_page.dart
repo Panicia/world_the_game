@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:world_the_game/logic/game_logic.dart';
+import '../logic/game_logic.dart';
+import 'game_tiles/game_field.dart';
 import 'game_tiles/game_tile.dart';
-
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key, required this.title});
@@ -15,12 +15,25 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
 
+  late final GameFieldController gameController;
+
+  late TextButton start;
+  late TextButton stop;
+  late TextButton step;
+  late TextButton clear;
+
   late Timer _timer;
 
-  final int _width = 30;
-  final int _height = 30;
+  void _startTimer() {
+    const duration = Duration(milliseconds: 50);
+    _timer = Timer.periodic(duration, (Timer timer) {
+      gameController.runGame();
+    });
+  }
 
-  late final GameWorld _game = GameWorld(_width, _height);
+  void _stopTimer() {
+    _timer.cancel();
+  }
 
   final ButtonStyle _raisedButtonStyle = ElevatedButton.styleFrom(
     foregroundColor: Colors.blue, backgroundColor: Colors.white,
@@ -32,17 +45,39 @@ class _GamePageState extends State<GamePage> {
     ),
   );
 
-  void _startTimer() {
-    const duration = Duration(milliseconds: 200);
-    _timer = Timer.periodic(duration, (Timer timer) {
-      setState(() {
-        _game.run();
-      });
-    });
-  }
+  @override
+  initState() {
+    gameController = GameFieldController();
 
-  void _stopTimer() {
-    _timer.cancel();
+    super.initState();
+    start = TextButton(
+      style: _raisedButtonStyle,
+      onPressed: () {
+        _startTimer();
+      },
+      child: const Text('Start'),
+    );
+    stop = TextButton(
+      style: _raisedButtonStyle,
+      onPressed: () {
+        _stopTimer();
+      },
+      child: const Text('Stop'),
+    );
+    step = TextButton(
+      style: _raisedButtonStyle,
+      onPressed: () {
+        gameController.runGame();
+      },
+      child: const Text('Step'),
+    );
+    clear = TextButton(
+      style: _raisedButtonStyle,
+      onPressed: () {
+        gameController.clearField();
+      },
+      child: const Text('Clear'),
+    );
   }
 
   @override
@@ -67,67 +102,20 @@ class _GamePageState extends State<GamePage> {
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
-                  style: _raisedButtonStyle,
-                  onPressed: () {
-                    _startTimer();
-                  },
-                  child: const Text('Start'),
-                ),
+                start,
                 const SizedBox(width: 16),
-                TextButton(
-                  style: _raisedButtonStyle,
-                  onPressed: () {
-                    _stopTimer();
-                  },
-                  child: const Text('Stop'),
-                ),
+                stop,
                 const SizedBox(width: 16),
-                TextButton(
-                  style: _raisedButtonStyle,
-                  onPressed: () {
-                    setState(() {
-                      _game.run();
-                    });
-                  },
-                  child: const Text('Step'),
-                ),
+                step,
                 const SizedBox(width: 16),
-                TextButton(
-                  style: _raisedButtonStyle,
-                  onPressed: () {
-                    setState(() {
-                      _game.clearField();
-                    });
-                  },
-                  child: const Text('Clear'),
-                )
+                clear
               ]
           ),
           const SizedBox(
               height: 10
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: _game
-                .getField()
-                .asMap()
-                .entries
-                .map<Widget>((list) {
-              int x = list.key;
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: list.value
-                    .asMap()
-                    .entries
-                    .map<Widget>((state) {
-                  int y = state.key;
-                  return GameTile(x, y, _game);
-                }).toList(),
-              );
-            }).toList(),
-          )
+          GameField(controller: gameController)
+          //GameField()
         ]
       )
     );
@@ -138,68 +126,20 @@ class _GamePageState extends State<GamePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: _game
-                .getField()
-                .asMap()
-                .entries
-                .map<Widget>((list) {
-              int x = list.key;
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: list.value
-                    .asMap()
-                    .entries
-                    .map<Widget>((state) {
-                  int y = state.key;
-                  return GameTile(x, y, _game);
-                }).toList(),
-              );
-            }).toList(),
-          ),
+          GameField(controller: gameController),
           const SizedBox(
               width: 16
           ),
           Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
-                  style: _raisedButtonStyle,
-                  onPressed: () {
-                    _startTimer();
-                  },
-                  child: const Text('Start'),
-                ),
+                start,
                 const SizedBox(height: 24),
-                TextButton(
-                  style: _raisedButtonStyle,
-                  onPressed: () {
-                    _stopTimer();
-                  },
-                  child: const Text('Stop'),
-                ),
+                stop,
                 const SizedBox(height: 24),
-                TextButton(
-                  style: _raisedButtonStyle,
-                  onPressed: () {
-                    setState(() {
-                      _game.run();
-                    });
-                  },
-                  child: const Text('Step'),
-                ),
+                step,
                 const SizedBox(height: 24),
-                TextButton(
-                  style: _raisedButtonStyle,
-                  onPressed: () {
-                    setState(() {
-                      _game.clearField();
-                    });
-                  },
-                  child: const Text('Clear'),
-                )
+                clear
               ]
           )
         ]

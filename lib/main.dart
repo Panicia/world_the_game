@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/game_page.dart';
+import 'package:flutter/services.dart';
 
 
 void main() {
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
