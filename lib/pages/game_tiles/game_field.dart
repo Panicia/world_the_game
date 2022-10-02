@@ -44,6 +44,7 @@ class _GameFieldState extends State<GameField> {
 
   @override
   Widget build(BuildContext context) {
+    var tilesList = _game.getTilesList();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,

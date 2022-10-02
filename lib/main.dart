@@ -14,11 +14,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'World',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const GamePage(title: 'World the Game'),
+      home: const GamePage(),
       debugShowCheckedModeBanner: false,
     );
   }

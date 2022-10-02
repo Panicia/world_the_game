@@ -4,9 +4,7 @@ import 'game_tiles/custom_button_start.dart';
 import 'game_tiles/game_field.dart';
 
 class GamePage extends StatefulWidget {
-  const GamePage({super.key, required this.title});
-
-  final String title;
+  const GamePage({super.key});
 
   @override
   State<GamePage> createState() => _GamePageState();
@@ -23,7 +21,7 @@ class _GamePageState extends State<GamePage> {
   late Timer _timer;
 
   void _startTimer() {
-    const duration = Duration(milliseconds: 50);
+    const duration = Duration(milliseconds: 300);
     _timer = Timer.periodic(duration, (Timer timer) {
       gameController.runGame();
     });
