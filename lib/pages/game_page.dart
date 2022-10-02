@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../logic/game_logic.dart';
+import 'game_tiles/custom_button_start.dart';
 import 'game_tiles/game_field.dart';
-import 'game_tiles/game_tile.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key, required this.title});
@@ -17,8 +16,7 @@ class _GamePageState extends State<GamePage> {
 
   late final GameFieldController gameController;
 
-  late TextButton start;
-  late TextButton stop;
+  late CustomButtonStart start;
   late TextButton step;
   late TextButton clear;
 
@@ -50,19 +48,9 @@ class _GamePageState extends State<GamePage> {
     gameController = GameFieldController();
 
     super.initState();
-    start = TextButton(
-      style: _raisedButtonStyle,
-      onPressed: () {
-        _startTimer();
-      },
-      child: const Text('Start'),
-    );
-    stop = TextButton(
-      style: _raisedButtonStyle,
-      onPressed: () {
-        _stopTimer();
-      },
-      child: const Text('Stop'),
+    start = CustomButtonStart(
+      startTimer: _startTimer,
+      stopTimer: _stopTimer,
     );
     step = TextButton(
       style: _raisedButtonStyle,
@@ -104,8 +92,6 @@ class _GamePageState extends State<GamePage> {
               children: [
                 start,
                 const SizedBox(width: 16),
-                stop,
-                const SizedBox(width: 16),
                 step,
                 const SizedBox(width: 16),
                 clear
@@ -134,8 +120,6 @@ class _GamePageState extends State<GamePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 start,
-                const SizedBox(height: 24),
-                stop,
                 const SizedBox(height: 24),
                 step,
                 const SizedBox(height: 24),

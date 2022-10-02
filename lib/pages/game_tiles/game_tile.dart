@@ -17,6 +17,18 @@ class GameTile extends StatelessWidget {
     }
   }
 
+  void tap() {
+    if(tile.alive == 1) {
+      rebuild(() {
+        game.setDeadOne(tile.x, tile.y);
+      });
+    } else {
+      rebuild(() {
+        game.setAliveOne(tile.x, tile.y);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -28,15 +40,7 @@ class GameTile extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.pink,
         onTap: () {
-          if(tile.alive == 1) {
-            rebuild(() {
-              game.setDeadOne(tile.x, tile.y);
-            });
-          } else {
-            rebuild(() {
-              game.setAliveOne(tile.x, tile.y);
-            });
-          }
+          tap();
         },
         child: Container(
           padding: const EdgeInsets.all(5.5),
