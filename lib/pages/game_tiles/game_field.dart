@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../logic/game_logic.dart';
 import 'game_tile.dart';
 
 
 class GameFieldController {
-  late void Function() runGame;
+  late void Function() startGame;
+  late void Function() stopGame;
+  late void Function() singleStep;
   late void Function() clearField;
 }
 
@@ -23,7 +26,26 @@ class _GameFieldState extends State<GameField> {
 
   late final GameWorld _game = GameWorld(_width, _height);
 
-  void runGame() {
+  late Timer _timer;
+
+  void startTimer() {
+    const duration = Duration(milliseconds: 300);
+    _timer = Timer.periodic(duration, (Timer timer) {
+      setState(() {
+        _game.run();
+      });
+    });
+  }
+
+  void startGame() {
+    startTimer();
+  }
+
+  void stopGame() {
+    _timer.cancel();
+  }
+
+  void singleStep() {
     setState(() {
       _game.run();
     });
@@ -37,14 +59,15 @@ class _GameFieldState extends State<GameField> {
 
   @override
   void initState() {
-    widget.controller.runGame = runGame;
+    widget.controller.startGame = startGame;
+    widget.controller.stopGame = stopGame;
+    widget.controller.singleStep = singleStep;
     widget.controller.clearField = clearField;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var tilesList = _game.getTilesList();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,

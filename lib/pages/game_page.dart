@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'game_tiles/custom_button_start.dart';
 import 'game_tiles/game_field.dart';
@@ -18,19 +17,6 @@ class _GamePageState extends State<GamePage> {
   late TextButton step;
   late TextButton clear;
 
-  late Timer _timer;
-
-  void _startTimer() {
-    const duration = Duration(milliseconds: 300);
-    _timer = Timer.periodic(duration, (Timer timer) {
-      gameController.runGame();
-    });
-  }
-
-  void _stopTimer() {
-    _timer.cancel();
-  }
-
   final ButtonStyle _raisedButtonStyle = ElevatedButton.styleFrom(
     foregroundColor: Colors.blue, backgroundColor: Colors.white,
     minimumSize: const Size(64, 36),
@@ -41,19 +27,27 @@ class _GamePageState extends State<GamePage> {
     ),
   );
 
+  void _startGame() {
+    gameController.startGame();
+  }
+
+  void _stopGame() {
+    gameController.stopGame();
+  }
+
   @override
   initState() {
     gameController = GameFieldController();
 
     super.initState();
     start = CustomButtonStart(
-      startTimer: _startTimer,
-      stopTimer: _stopTimer,
+      startTimer: _startGame,
+      stopTimer: _stopGame,
     );
     step = TextButton(
       style: _raisedButtonStyle,
       onPressed: () {
-        gameController.runGame();
+        gameController.singleStep();
       },
       child: const Text('Step'),
     );
