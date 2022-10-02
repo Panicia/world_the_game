@@ -12,8 +12,9 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
 
   late final GameFieldController gameController;
+  late final GameField gameField = GameField(controller: gameController);
 
-  late CustomButtonStart start;
+  late final CustomButtonStart start;
   late TextButton step;
   late TextButton clear;
 
@@ -37,12 +38,12 @@ class _GamePageState extends State<GamePage> {
 
   @override
   initState() {
+    super.initState();
     gameController = GameFieldController();
 
-    super.initState();
     start = CustomButtonStart(
-      startTimer: _startGame,
-      stopTimer: _stopGame,
+      start: _startGame,
+      stop: _stopGame,
     );
     step = TextButton(
       style: _raisedButtonStyle,
@@ -92,7 +93,7 @@ class _GamePageState extends State<GamePage> {
           const SizedBox(
               height: 10
           ),
-          GameField(controller: gameController)
+          gameField
           //GameField()
         ]
       )
@@ -104,7 +105,7 @@ class _GamePageState extends State<GamePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GameField(controller: gameController),
+          gameField,
           const SizedBox(
               width: 16
           ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:world_the_game/logic/game_logic.dart';
 
-
 class GameTile extends StatelessWidget {
 
   final Function rebuild;

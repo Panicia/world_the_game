@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomButtonStart extends StatefulWidget {
-  const CustomButtonStart({super.key, required this.startTimer, required this.stopTimer});
+  const CustomButtonStart({super.key, required this.start, required this.stop});
 
-  final Function startTimer;
-  final Function stopTimer;
+  final Function start;
+  final Function stop;
 
   @override
   State<CustomButtonStart> createState() => _CustomButtonState();
@@ -20,10 +20,10 @@ class _CustomButtonState extends State<CustomButtonStart> {
 
   void pressButton() {
     if(!pressed){
-      widget.startTimer();
+      widget.start();
       setStopButton();
     } else {
-      widget.stopTimer();
+      widget.stop();
       setStartButton();
     }
   }

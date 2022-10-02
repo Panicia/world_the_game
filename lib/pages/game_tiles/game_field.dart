@@ -12,7 +12,7 @@ class GameFieldController {
 }
 
 class GameField extends StatefulWidget {
-  const GameField({super.key, required this.controller});
+  const GameField({super.key, required this.controller, game});
   final GameFieldController controller;
 
   @override
