@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
-class CustomButtonStart extends StatefulWidget {
-  const CustomButtonStart({super.key, required this.start, required this.stop});
+class GameStateTransfer {
+  bool started = false;
+}
 
+class CustomButtonStart extends StatefulWidget {
+  const CustomButtonStart({super.key, required this.start, required this.stop, required this.gameState});
   final Function start;
   final Function stop;
+  final GameStateTransfer gameState;
 
   @override
   State<CustomButtonStart> createState() => _CustomButtonState();
@@ -12,19 +16,20 @@ class CustomButtonStart extends StatefulWidget {
 
 class _CustomButtonState extends State<CustomButtonStart> {
 
-  bool pressed = false;
-  String text = 'Start';
-  Color firstColor = Colors.blue;
-  Color secondColor = Colors.white;
-  double borderWidth = 2;
+  late String text;
+  late Color firstColor;
+  late Color secondColor;
+  late double borderWidth;
 
   void pressButton() {
-    if(!pressed){
+    if(!widget.gameState.started){
       widget.start();
       setStopButton();
+      widget.gameState.started = true;
     } else {
       widget.stop();
       setStartButton();
+      widget.gameState.started = false;
     }
   }
 
@@ -34,7 +39,6 @@ class _CustomButtonState extends State<CustomButtonStart> {
       firstColor = Colors.white;
       secondColor = Colors.pink;
       borderWidth = 0;
-      pressed = true;
     });
   }
 
@@ -44,8 +48,17 @@ class _CustomButtonState extends State<CustomButtonStart> {
       firstColor = Colors.blue;
       secondColor = Colors.white;
       borderWidth = 2;
-      pressed = false;
     });
+  }
+
+  @override
+  void initState() {
+    if(!widget.gameState.started) {
+      setStartButton();
+    } else {
+      setStopButton();
+    }
+    super.initState();
   }
 
   @override
